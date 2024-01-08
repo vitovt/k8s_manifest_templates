@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: multi-volume-pod
+spec:
+  containers:
+    - name: container
+      image: nginx
+      volumeMounts:
+        - name: config-volume
+          mountPath: /etc/config
+        - name: secret-volume
+          mountPath: /etc/secret
+        - name: host-volume
+          mountPath: /etc/host
+        - name: pvc-volume
+          mountPath: /data
+  volumes:
+    - name: config-volume
+      configMap:
+        name: example-configmap
+        items:
+          - key: config-file
+            path: config-file.conf
+    - name: secret-volume
+      secret:
+        secretName: example-secret
+        items:
+          - key: secret-key
+            path: secret-key.txt
+    - name: host-volume
+      hostPath:
+        path: /var/run
+        type: Directory
+    - name: pvc-volume
+      persistentVolumeClaim:
+        claimName: example-pvc
+

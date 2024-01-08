@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: rsync-job
+spec:
+  template:
+    spec:
+      containers:
+      - name: rsync-container
+        image: instrumentisto/rsync-ssh
+        command: ["rsync"]
+        args: ["-av", "/source/", "/destination/"]
+        volumeMounts:
+        - name: rsync-volume
+          mountPath: /source
+      restartPolicy: OnFailure
+      volumes:
+      - name: rsync-volume
+        emptyDir: {}
+

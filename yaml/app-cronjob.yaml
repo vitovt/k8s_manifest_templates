@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: template-pod
+  namespace: template-namespace
+spec:
+  containers:
+    - name: demo-container
+      image: demo:latest
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: detailed-cronjob
+  namespace: template-namespace
+spec:
+  schedule: "0 1 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: cronjob-container
+            image: demo:latest
+          restartPolicy: OnFailure
+
+
